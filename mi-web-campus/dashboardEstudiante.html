@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Estudiante - Campus ET36</title>
+    <link rel="icon" href="favicon.ico">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="./dashboard.css">
+</head>
+<body>
+
+    <header class="top-header">
+        <span class="material-icons menu-toggle">menu</span>
+        <div class="header-logo">
+            <img src="imagenes/LogoEt36.png" alt="Campus ET36 Logo">
+            <span>Campus ET36</span>
+        </div>
+        <div class="user-profile">
+            <span id="userNameDisplay" class="user-name">Estudiante</span>
+            <div class="user-avatar"></div>
+        </div>
+    </header>
+
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#" class="nav-link active"><span class="material-icons">home</span> <span>Inicio</span></a></li>
+                    <li><a href="#" class="nav-link"><span class="material-icons">add</span> <span>Crear Contenido</span></a></li>
+                    <li><a href="#" class="nav-link"><span class="material-icons">description</span> <span>Mis Calificaciones</span></a></li>
+                    <li><a href="#" class="nav-link"><span class="material-icons">event</span> <span>Calendario</span></a></li>
+                    <li><a href="#" class="nav-link"><span class="material-icons">chat</span> <span>Mensajes</span></a></li>
+                    <li><a href="#" class="nav-link"><span class="material-icons">settings</span> <span>Configuración</span></a></li>
+                    <li><a href="#" id="logoutButton" class="nav-link"><span class="material-icons">logout</span> <span>Cerrar Sesión</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="main-header">
+            </header>
+
+            <section class="dashboard-section">
+                <h1>Mis Clases</h1>
+                <div class="class-grid">
+                    <div class="class-card">
+                        <div class="class-header" style="background-color: salmon;">
+                            <h3 class="class-title">Nombre de la materia</h3>
+                            <div class="professor-avatar" style="background-color: limegreen;"></div>
+                        </div>
+                        <div class="class-body">
+                            <p>Aquí podría ir una breve descripción o detalles de la clase.</p>
+                        </div>
+                    </div>
+
+                    <div class="class-card">
+                        <div class="class-header" style="background-color: salmon;">
+                            <h3 class="class-title">Nombre de la materia</h3>
+                            <div class="professor-avatar" style="background-color: limegreen;"></div>
+                        </div>
+                        <div class="class-body">
+                            <p>Aquí podría ir una breve descripción o detalles de la clase.</p>
+                        </div>
+                    </div>
+                    <div class="class-card">
+                        <div class="class-header" style="background-color: salmon;">
+                            <h3 class="class-title">Nombre de la materia</h3>
+                            <div class="professor-avatar" style="background-color: limegreen;"></div>
+                        </div>
+                        <div class="class-body">
+                            <p>Aquí podría ir una breve descripción o detalles de la clase.</p>
+                        </div>
+                    </div>
+                    <div class="class-card">
+                        <div class="class-header" style="background-color: salmon;">
+                            <h3 class="class-title">Nombre de la materia</h3>
+                            <div class="professor-avatar" style="background-color: limegreen;"></div>
+                        </div>
+                        <div class="class-body">
+                            <p>Aquí podría ir una breve descripción o detalles de la clase.</p>
+                        </div>
+                    </div>
+                    <div class="class-card">
+                        <div class="class-header" style="background-color: salmon;">
+                            <h3 class="class-title">Nombre de la materia</h3>
+                            <div class="professor-avatar" style="background-color: limegreen;"></div>
+                        </div>
+                        <div class="class-body">
+                            <p>Aquí podría ir una breve descripción o detalles de la clase.</p>
+                        </div>
+                    </div>
+                    <div class="class-card">
+                        <div class="class-header" style="background-color: salmon;">
+                            <h3 class="class-title">Nombre de la materia</h3>
+                            <div class="professor-avatar" style="background-color: limegreen;"></div>
+                        </div>
+                        <div class="class-body">
+                            <p>Aquí podría ir una breve descripción o detalles de la clase.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="./dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,818 @@
+/* ESTILOS GENERALES Y RESET PARA HTML/BODY */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden; /* Evita el desplazamiento horizontal no deseado */
+    /* overflow-y: scroll; /* Opcional: Si quieres que la barra de scroll vertical siempre sea visible */
+    box-sizing: border-box; /* Asegura que padding y border no aumenten el tamaño */
+}
+
+/* General Body Styles */
+body {
+    margin: 0; /* Asegura que no haya margen */
+    font-family: sans-serif; /* Puedes elegir una fuente diferente */
+    color: #fff; /* Texto blanco para mejor contraste en fondo oscuro */
+    /* Cambiamos el color de fondo para que sea el azul que se ve en la página de login/registro */
+    /* Este color será el fondo predeterminado para TODAS las páginas */
+    background-color: #2b6cb0;
+    line-height: 1.6; /* Un line-height general razonable para el texto del body */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    box-sizing: border-box; /* Asegura que padding y border no aumenten el tamaño */
+}
+
+/* Header and Navigation Bar */
+header {
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo negro semi-transparente para el encabezado */
+    padding: 15px 0;
+    position: fixed; /* Mantiene el encabezado fijo en la parte superior */
+    width: 100%;
+    z-index: 1000; /* Asegura que el encabezado esté por encima de otro contenido */
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px; /* Limita el ancho del contenido */
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.logo img {
+    height: 40px; /* Ajusta el tamaño del logo */
+    margin-right: 10px;
+}
+
+.nav-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.nav-links li {
+    margin-left: 30px;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.1em;
+    padding: 5px 10px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-links a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+}
+
+/* Estilo para el enlace activo en la barra de navegación */
+.nav-links a.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+}
+
+/* Hero Section (Background Image and Text) - Específico para index.html */
+.hero-section {
+    position: relative;
+    height: 100vh; /* Altura completa de la ventana */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+    overflow: hidden; /* Oculta el desbordamiento del pseudo-elemento */
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Ruta de la imagen de tu campus. ¡Asegúrate de que sea correcta! */
+    background: url('imagenes/fotoFondo.jpg') no-repeat center center/cover;
+    filter: brightness(0.4); /* Oscurece la imagen de fondo */
+    z-index: -1; /* Coloca la imagen detrás del contenido */
+}
+
+.hero-content {
+    z-index: 1; /* Asegura que el contenido esté por encima del fondo oscurecido */
+    max-width: 800px;
+    padding: 20px;
+}
+
+.hero-content h1 {
+    font-size: 3.5em;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Agrega sombra al texto para mejor legibilidad */
+}
+
+.hero-content p {
+    font-size: 1.5em;
+    line-height: 1.6;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+/* Footer */
+footer {
+    background-color: #1a1a1a; /* Fondo más oscuro para el pie de página */
+    color: #aaa;
+    text-align: center;
+    padding: 20px 0;
+    position: relative; /* Relativo para asegurar que esté al final después del hero */
+    width: 100%;
+    box-sizing: border-box; /* Incluye el padding en el ancho */
+}
+
+/* ----------------------------------------------------------- */
+/* ESTILOS ESPECÍFICOS PARA INICIO/REGISTRO (inicioRegistro.html) */
+/* ----------------------------------------------------------- */
+
+/* Estilos para el contenedor principal del formulario */
+main.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Ajusta la altura para que el header y footer quepan y el formulario se centre */
+    min-height: calc(100vh - 120px); /* Aproximadamente 80px de header + 40px de footer */
+    padding: 20px; /* Padding para que no se pegue a los bordes en móvil */
+    box-sizing: border-box;
+}
+
+/* Estilos para la tarjeta "flip" */
+.flip-card {
+    background-color: transparent;
+    width: 400px; /* Ancho de la tarjeta */
+    height: 550px; /* Altura de la tarjeta - ajusta según el contenido de los formularios */
+    perspective: 1000px; /* Necesario para el efecto 3D de giro */
+    position: relative;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s; /* Duración de la animación de flip */
+    transform-style: preserve-3d; /* Permite que los elementos hijos se posicionen en 3D */
+    border-radius: 10px;
+}
+
+/* Clase para el estado "flipped" (cuando la tarjeta ha girado) */
+.flip-card.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+/* Estilos para los lados frontal (login) y trasero (registro) de la tarjeta */
+.flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /* Oculta la parte trasera de un elemento cuando mira al usuario */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    background-color: #e0e0e0; /* Color de fondo de los formularios */
+    color: #333; /* Color de texto para los formularios */
+    border-radius: 10px;
+    padding: 40px 30px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centrar contenido verticalmente */
+    align-items: center; /* Centrar contenido horizontalmente */
+}
+
+.flip-card-back {
+    transform: rotateY(180deg); /* La parte de atrás empieza rotada para ocultarse */
+}
+
+/* Estilos para los encabezados de los formularios */
+.flip-card h2 {
+    margin-bottom: 30px;
+    font-size: 2em;
+    color: #333;
+}
+
+/* Grupos de entrada (ícono + input) */
+.input-group {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc; /* Línea inferior para separar inputs */
+    padding-bottom: 5px;
+}
+
+.input-group .material-icons {
+    color: #666;
+    margin-right: 10px;
+    cursor: pointer; /* Cursor de puntero para los íconos de visibilidad */
+    font-size: 24px; /* Tamaño de los íconos */
+    /* Transición suave para el cambio de ícono (opcional) */
+    transition: color 0.3s ease;
+}
+
+.input-group input {
+    border: none;
+    background: transparent;
+    outline: none; /* Quita el borde de enfoque al hacer clic */
+    flex-grow: 1; /* El input ocupa el espacio restante */
+    padding: 8px 0;
+    font-size: 1.1em;
+    color: #333;
+}
+
+.input-group input::placeholder {
+    color: #999;
+}
+
+/* Estilos para el botón primario */
+.btn-primary {
+    background-color: #007bff; /* Azul vibrante */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2em;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 300px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Texto para cambiar entre formularios ("¿No tienes cuenta? Regístrate") */
+.switch-form-text {
+    margin-top: 25px;
+    font-size: 0.95em;
+    color: #555;
+}
+
+.switch-form-text a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.switch-form-text a:hover {
+    text-decoration: underline;
+}
+
+/* Añade esto a tu estilos.css */
+.logo-link {
+    text-decoration: none; /* Quita el subrayado del enlace */
+    color: inherit; /* Hereda el color del texto de su padre, que es el logo */
+    display: flex; /* Para que el enlace se comporte como un flexbox y envuelva bien el logo */
+    align-items: center; /* Centra el logo y el texto verticalmente */
+}
+/* ----------------------------------------------------------- */
+/* Media Queries para Diseño Adaptativo (Responsive Design) */
+/* ----------------------------------------------------------- */
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+    }
+
+    .nav-links {
+        margin-top: 15px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nav-links li {
+        margin: 10px 0;
+    }
+
+    .hero-content h1 {
+        font-size: 2.5em;
+    }
+
+    .hero-content p {
+        font-size: 1.2em;
+    }
+
+    /* Ajustes para la tarjeta de flip en tabletas */
+    .flip-card {
+        width: 90%; /* Ajusta el ancho de la tarjeta */
+        height: auto; /* Altura automática para que el contenido quepa */
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        font-size: 1.2em;
+    }
+
+    .logo img {
+        height: 30px;
+    }
+
+    .hero-content h1 {
+        font-size: 2em;
+    }
+
+    .hero-content p {
+        font-size: 1em;
+    }
+
+    /* Ajustes para la tarjeta de flip en móviles */
+    .flip-card {
+        width: 95%; /* Un poco más ancho en móviles */
+        height: auto;
+    }
+
+    .flip-card-front, .flip-card-back {
+        padding: 25px 15px; /* Reduce el padding en móviles */
+    }
+
+    .flip-card h2 {
+        font-size: 1.6em;
+    }
+
+    .input-group input, .btn-primary {
+        font-size: 0.95em;
+        padding: 10px;
+    }
+
+    .switch-form-text {
+        font-size: 0.85em;
+    }
+}
+
+/* estilos.css */
+
+/* ... (Todo tu código existente hasta el final de las Media Queries para móviles) ... */
+
+/* AÑADIDO: Clase genérica para el padding bajo el header fijo */
+/* Calcula la altura del header: 40px (logo) + 2 * 15px (padding top/bottom del header) = 70px. */
+/* Un padding de 80px o 85px es seguro para dejar un pequeño espacio extra. */
+.padding-for-fixed-header {
+    padding-top: 85px; /* Ajusta este valor. 70px es la altura del header, 85px le da un poco de margen. */
+    box-sizing: border-box; /* Asegura que el padding no aumente el tamaño total del elemento */
+}
+
+/* ----------------------------------------------------------- */
+/* ESTILOS ESPECÍFICOS PARA LA PÁGINA DE ESPECIALIDADES */
+/* ----------------------------------------------------------- */
+
+.especialidades-main-container {
+    /* Este main es el que lleva la clase .padding-for-fixed-header */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Centra verticalmente si el contenido no llena la altura completa */
+    min-height: calc(100vh - 70px - 40px); /* 100vh - altura del header (70px) - altura del footer (40px) */
+    background-color: #2b6cb0; /* Fondo azul, como en el body */
+    padding-bottom: 40px; /* Un poco de padding en la parte inferior antes del footer */
+    box-sizing: border-box; /* Crucial para el cálculo del padding */
+    flex-direction: column; /* Para que la sección de tarjetas se centre como un bloque */
+}
+
+.especialidades-grid {
+    display: flex;
+    flex-wrap: wrap; /* Permite que las tarjetas salten a la siguiente línea en pantallas pequeñas */
+    justify-content: center; /* Centra las tarjetas horizontalmente */
+    gap: 40px; /* Espacio entre las tarjetas */
+    max-width: 1200px; /* Limita el ancho del contenedor de las tarjetas */
+    width: 100%; /* Asegura que ocupe todo el ancho disponible hasta el max-width */
+    padding: 20px; /* Padding interno para que las tarjetas no se peguen a los bordes laterales del viewport */
+    box-sizing: border-box;
+}
+
+.especialidad-card {
+    background-color: #ffffff; /* Fondo blanco/gris claro para las tarjetas */
+    border-radius: 15px; /* Bordes redondeados */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra para efecto 3D */
+    overflow: hidden; /* Asegura que la imagen no se desborde */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 450px; /* Ancho fijo para las tarjetas, ajusta según el diseño deseado */
+    padding: 30px; /* Padding interno dentro de la tarjeta */
+    box-sizing: border-box; /* Incluye el padding en el ancho de 450px */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra el contenido (imagen, título) dentro de la tarjeta */
+    text-align: center;
+    color: #333; /* Color de texto para los contenidos de la tarjeta */
+}
+
+.especialidad-card:hover {
+    transform: translateY(-10px); /* Efecto de elevación al pasar el mouse */
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+}
+
+.especialidad-link {
+    text-decoration: none; /* Elimina el subrayado del enlace */
+    color: inherit; /* Hereda el color del texto de la tarjeta */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; /* Asegura que el enlace ocupe todo el ancho de la tarjeta */
+}
+
+.especialidad-card .card-image {
+    width: 100%;
+    max-width: 300px; /* Controla el tamaño de la imagen/iconos dentro de la tarjeta */
+    height: 200px; /* Altura fija para el contenedor de la imagen */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.especialidad-card .main-specialty-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Asegura que la imagen se ajuste sin distorsionarse */
+}
+
+.especialidad-card .card-title {
+    font-size: 2em;
+    margin-top: 0;
+    margin-bottom: 0; /* Asegura que no haya margen inferior extra */
+    color: #333;
+    font-weight: bold;
+}
+
+/* Media Queries para Especialidades */
+@media (max-width: 900px) {
+    .especialidad-card {
+        width: 80%; /* Ajusta el ancho en pantallas más pequeñas */
+        max-width: 450px; /* Mantiene un max-width para no estirarse demasiado */
+    }
+}
+
+@media (max-width: 600px) {
+    .especialidades-grid {
+        gap: 20px; /* Reduce el espacio entre tarjetas en móviles */
+    }
+    .especialidad-card {
+        width: 95%; /* Casi ancho completo en móviles muy pequeños */
+        padding: 20px;
+    }
+    .especialidad-card .card-title {
+        font-size: 1.6em;
+    }
+    .especialidad-card .card-image {
+        height: 150px; /* Reduce la altura de la imagen en móviles */
+    }
+}
+
+/* estilos.css */
+
+/* ... (Todo tu código existente, incluyendo los estilos para especialidades.html) ... */
+
+/* ----------------------------------------------------------- */
+/* ESTILOS ESPECÍFICOS PARA LA PÁGINA DE INSCRIPCIONES */
+/* ----------------------------------------------------------- */
+
+.inscripciones-main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra el contenido horizontalmente */
+    background-color: #2b6cb0; /* Fondo azul, como en el body */
+    padding-bottom: 40px; /* Un poco de padding en la parte inferior antes del footer */
+    min-height: calc(100vh - 70px - 40px); /* 100vh - altura del header (70px) - altura del footer (40px) */
+    box-sizing: border-box;
+}
+
+.inscripciones-content {
+    max-width: 900px; /* Ancho máximo para el contenido de inscripciones */
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center; /* Centra el título principal */
+    color: #fff; /* Color de texto blanco para el título */
+}
+
+.inscripciones-content h1 {
+    font-size: 2.5em;
+    margin-bottom: 40px;
+    margin-top: 20px; /* Espacio superior para el título */
+}
+
+/* Estilos para el Acordeón */
+.accordion-item {
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco casi opaco para el ítem del acordeón */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px; /* Espacio entre los ítems del acordeón */
+    overflow: hidden; /* Asegura que los bordes redondeados se vean bien */
+    color: #333; /* Color de texto oscuro para el contenido del acordeón */
+    width: 100%;
+    max-width: 700px; /* Ancho máximo de los ítems del acordeón */
+}
+
+.accordion-header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    cursor: pointer;
+    background-color: #f5f5f5; /* Fondo ligero para el encabezado */
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s ease;
+}
+
+.accordion-item.active .accordion-header {
+    background-color: #e0e0e0; /* Color al estar activo */
+}
+
+.accordion-header:hover {
+    background-color: #e9e9e9;
+}
+
+.accordion-header h2 {
+    margin: 0;
+    font-size: 1.5em;
+    flex-grow: 1; /* Permite que el título ocupe el espacio restante */
+    text-align: left; /* Alinea el texto a la izquierda */
+}
+
+.accordion-icon {
+    font-size: 30px; /* Tamaño del ícono de flecha */
+    margin-right: 15px; /* Espacio a la derecha del ícono */
+    transition: transform 0.3s ease; /* Transición suave para la rotación del ícono */
+    color: #007bff; /* Color azul para la flecha */
+}
+
+.accordion-item.active .accordion-icon {
+    transform: rotate(180deg); /* Rota la flecha hacia arriba cuando el acordeón está abierto */
+}
+
+.accordion-content {
+    padding: 0 20px;
+    max-height: 0; /* Inicialmente oculto */
+    overflow: hidden;
+    transition: max-height 0.4s ease-out, padding 0.4s ease-out; /* Transición para el despliegue */
+    background-color: #fff;
+    text-align: left; /* Alinea el texto a la izquierda */
+}
+
+.accordion-item.active .accordion-content {
+    max-height: 500px; /* Altura máxima al estar abierto, ajusta si tu contenido es más largo */
+    padding: 20px; /* Padding cuando está abierto */
+}
+
+.accordion-content ul {
+    list-style: none; /* Elimina los puntos predeterminados */
+    padding: 0;
+    margin: 0;
+}
+
+.accordion-content ul li {
+    padding: 8px 0;
+    border-bottom: 1px dotted #eee; /* Línea punteada entre subpuntos */
+    font-size: 1.1em;
+}
+
+.accordion-content ul li:last-child {
+    border-bottom: none; /* No hay línea en el último elemento */
+}
+
+/* Media Queries para Inscripciones */
+@media (max-width: 768px) {
+    .inscripciones-content h1 {
+        font-size: 2em;
+    }
+    .accordion-item {
+        max-width: 90%;
+    }
+    .accordion-header h2 {
+        font-size: 1.3em;
+    }
+    .accordion-icon {
+        font-size: 26px;
+    }
+}
+
+@media (max-width: 480px) {
+    .inscripciones-content h1 {
+        font-size: 1.8em;
+    }
+    .accordion-item {
+        max-width: 95%;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    .accordion-header {
+        padding: 15px;
+    }
+    .accordion-header h2 {
+        font-size: 1.1em;
+    }
+    .accordion-icon {
+        font-size: 24px;
+        margin-right: 10px;
+    }
+    .accordion-content {
+        padding: 0 15px;
+    }
+    .accordion-item.active .accordion-content {
+        padding: 15px;
+    }
+    .accordion-content ul li {
+        font-size: 1em;
+    }
+}
+
+/* ----------------------------------------------------------- */
+/* ESTILOS ESPECÍFICOS PARA LA PÁGINA DE CONTACTO (AJUSTES FINALES) */
+/* ----------------------------------------------------------- */
+
+.contacto-main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra el contenido horizontalmente */
+    background-color: #2b6cb0; /* Fondo azul, como en el body */
+    padding-bottom: 40px; /* Un poco de padding en la parte inferior antes del footer */
+    min-height: calc(100vh - 70px - 40px); /* 100vh - altura del header (70px) - altura del footer (40px) */
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+.contacto-main-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('imagenes/fotoFondo.jpg') no-repeat center center/cover;
+    filter: brightness(0.4);
+    z-index: -1;
+}
+
+.contacto-content {
+    max-width: 1200px;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+    color: #fff;
+    z-index: 1;
+}
+
+.contacto-content h1 {
+    font-size: 3em;
+    margin-bottom: 40px;
+    margin-top: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.contact-info-map-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px; /* Espacio entre la información de contacto y el mapa */
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    box-sizing: border-box;
+    align-items: flex-start;
+}
+
+.contact-details {
+    flex: 1.5; /* Damos más espacio a los detalles de contacto */
+    min-width: 380px; /* Aumentamos un poco más el ancho mínimo para que quepa el email completo */
+    text-align: left;
+    color: #333;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.contact-details ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.contact-details li {
+    font-size: 1.25em; /* Mantener el tamaño original o ajustarlo ligeramente */
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    line-height: 1.3;
+    /* Remover white-space y text-overflow de aquí para permitir que el texto se envuelva si es necesario */
+    /* Lo manejaremos con flex-shrink en los íconos y quizás un font-size ligeramente menor en móviles */
+    white-space: normal; /* Permitir que el texto se envuelva */
+    overflow: visible; /* Asegurar que el texto sea completamente visible */
+}
+
+.contact-details li:last-child {
+    margin-bottom: 0;
+}
+
+.contact-details .material-icons {
+    font-size: 28px;
+    margin-right: 15px;
+    color: #007bff;
+    flex-shrink: 0; /* Sigue siendo importante para que el ícono no se encoja */
+}
+
+/* No necesitamos estilos específicos para 'a' dentro de contact-details ahora que no son todos links,
+   solo para el icono de Instagram. */
+.contact-details a { /* Esto aplicará solo al link de Instagram */
+    color: #007bff; /* Color original para el link si el link de Instagram lo usa */
+    text-decoration: none;
+    transition: color 0.3s ease;
+    /* Asegurarnos de que el texto alrededor del icono de IG no se corte si fuera largo */
+    white-space: nowrap; /* Mantener "Redes: [icono]" en una línea */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex; /* Para alinear el texto "Redes:" y el icono de IG */
+    align-items: center;
+}
+
+
+.contact-details a:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+.instagram-icon {
+    height: 30px;
+    vertical-align: middle;
+    margin-left: 10px;
+    flex-shrink: 0;
+}
+
+.map-container {
+    flex: 1; /* Reducimos la proporción del mapa para dar más espacio a los detalles */
+    min-width: 450px; /* Mantenemos el ancho mínimo del mapa para que no se vea demasiado pequeño */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.map-container iframe {
+    width: 100%;
+    height: 450px; /* Mantener la altura del mapa para que no se vea más pequeño */
+    border-radius: 10px;
+}
+
+/* Media Queries para Contacto */
+@media (max-width: 992px) {
+    .contact-info-map-container {
+        flex-direction: column;
+        padding: 20px;
+    }
+    .contact-details, .map-container {
+        flex: none;
+        width: 100%;
+        min-width: unset;
+    }
+    .map-container iframe {
+        height: 350px; /* Puedes ajustar esta altura para tablets si lo consideras necesario */
+    }
+    .contact-details li {
+        font-size: 1.1em;
+    }
+}
+
+@media (max-width: 600px) {
+    .contacto-content h1 {
+        font-size: 2.2em;
+        margin-bottom: 30px;
+    }
+    .contact-info-map-container {
+        padding: 15px;
+    }
+    .contact-details li {
+        font-size: 1em; /* Ajustar a un tamaño que quepa bien en móviles */
+    }
+    .contact-details .material-icons {
+        font-size: 24px;
+        margin-right: 10px;
+    }
+    .instagram-icon {
+        height: 25px;
+    }
+    .map-container iframe {
+        height: 250px; /* Ajustar la altura del mapa para móviles */
+    }
+}
