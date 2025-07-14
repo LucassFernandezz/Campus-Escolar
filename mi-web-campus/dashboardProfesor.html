@@ -26,13 +26,14 @@
         <aside class="sidebar">
             <nav class="sidebar-nav">
                 <ul>
-                    <li><a href="#" class="nav-link"><span class="material-icons">add</span> <span>Agregar Clase</span></a></li>
-                    <li><a href="#" class="nav-link active"><span class="material-icons">home</span> <span>Mis Clases</span></a></li>
-                    <li><a href="#" class="nav-link"><span class="material-icons">folder</span> <span>Tareas a Corregir</span></a></li>
-                    <li><a href="#" class="nav-link"><span class="material-icons">group</span> <span>Lista de Clases</span></a></li>
-                    <li><a href="#" class="nav-link"><span class="material-icons">event</span> <span>Calendario</span></a></li>
-                    <li><a href="#" class="nav-link"><span class="material-icons">chat</span> <span>Mensajes</span></a></li>
-                    <li><a href="#" class="nav-link"><span class="material-icons">settings</span> <span>Configuración</span></a></li>
+                    <li><a href="#" class="nav-link" data-target="misClasesSection"><span class="material-icons">home</span> <span>Mis Clases</span></a></li>
+                    <li><a href="#" class="nav-link" data-target="agregarClaseSection"><span class="material-icons">add</span> <span>Agregar Clase</span></a></li>
+                    <li><a href="#" class="nav-link" data-target="tareasCorregirSection"><span class="material-icons">folder</span> <span>Tareas a Corregir</span></a></li>
+                    <li><a href="#" class="nav-link" data-target="listaClasesSection"><span class="material-icons">group</span> <span>Lista de Clases</span></a></li>
+                    <li><a href="#" class="nav-link" data-target="calendarioSection"><span class="material-icons">event</span> <span>Calendario</span></a></li>
+                    <li><a href="#" class="nav-link" data-target="publicarComunicadoSection"><span class="material-icons">campaign</span> <span>Publicar Comunicado</span></a></li>
+                    <li><a href="#" class="nav-link" data-target="mensajesSection"><span class="material-icons">chat</span> <span>Mensajes</span></a></li>
+                    <li><a href="#" class="nav-link" data-target="configuracionSection"><span class="material-icons">settings</span> <span>Configuración</span></a></li>
                     <li><a href="#" id="logoutButton" class="nav-link"><span class="material-icons">logout</span> <span>Cerrar Sesión</span></a></li>
                 </ul>
             </nav>
@@ -42,7 +43,7 @@
             <header class="main-header">
             </header>
 
-            <section class="dashboard-section">
+            <section class="dashboard-section content-section active" id="misClasesSection">
                 <h1>Mis Clases</h1>
                 <div class="class-grid">
                     <div class="class-card">
@@ -54,7 +55,6 @@
                             <p>Aquí podría ir una breve descripción o detalles de la clase.</p>
                         </div>
                     </div>
-
                     <div class="class-card">
                         <div class="class-header" style="background-color: salmon;">
                             <h3 class="class-title">Nombre de la materia</h3>
@@ -102,6 +102,64 @@
                     </div>
                 </div>
             </section>
+
+            <section class="dashboard-section content-section" id="agregarClaseSection" style="display: none;">
+                <h1>Agregar Nueva Clase</h1>
+                <p>Aquí irá el formulario para agregar nuevas clases.</p>
+            </section>
+
+            <section class="dashboard-section content-section" id="tareasCorregirSection" style="display: none;">
+                <h1>Tareas a Corregir</h1>
+                <p>Aquí se mostrarán las tareas que los estudiantes han entregado.</p>
+            </section>
+
+            <section class="dashboard-section content-section" id="listaClasesSection" style="display: none;">
+                <h1>Lista de Clases</h1>
+                <p>Aquí se listarán todas las clases disponibles.</p>
+            </section>
+
+            <section class="dashboard-section content-section" id="calendarioSection" style="display: none;">
+                <h1>Calendario</h1>
+                <p>Aquí se mostrará el calendario de eventos y fechas importantes.</p>
+            </section>
+
+            <section class="dashboard-section content-section" id="mensajesSection" style="display: none;">
+                <h1>Mensajes / Avisos</h1>
+                <p>Aquí se mostrarán los mensajes y comunicados relevantes.</p>
+            </section>
+
+            <section class="dashboard-section content-section" id="configuracionSection" style="display: none;">
+                <h1>Configuración</h1>
+                <p>Aquí se podrán ajustar las configuraciones del perfil.</p>
+            </section>
+
+
+            <section class="dashboard-section content-section" id="publicarComunicadoSection" style="display: none;">
+                <h1>Publicar Nuevo Comunicado</h1>
+                <form id="formPublicarComunicado">
+                    <div class="form-group">
+                        <label for="comunicadoTitulo">Título:</label>
+                        <input type="text" id="comunicadoTitulo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="comunicadoContenido">Contenido:</label>
+                        <textarea id="comunicadoContenido" rows="5" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="comunicadoRolDestinatario">Dirigido a:</label>
+                        <select id="comunicadoRolDestinatario">
+                            <option value="todos">Todos los Usuarios</option>
+                            <option value="estudiante">Estudiantes</option>
+                            <option value="profesor">Profesores</option>
+                            <option value="familia">Familias</option>
+                            <option value="directivo">Directivos</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">Publicar Comunicado</button>
+                    <p id="comunicadoMessage" style="margin-top: 10px;"></p>
+                </form>
+            </section>
+
         </main>
     </div>
 

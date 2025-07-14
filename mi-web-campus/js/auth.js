@@ -1,12 +1,52 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Obtenemos una referencia al formulario de registro y al formulario de login
     const registerForm = document.getElementById('registerForm');
     const loginForm = document.getElementById('loginForm');
 
-    // --- Lógica para el Registro ---
+    // REFERENCIAS A LOS NUEVOS DIVS DE MENSAJES
+    const messageDivLogin = document.getElementById('message'); 
+    const messageDivRegister = document.getElementById('message-register'); 
+
+    // Funciones para cambiar entre formularios y mostrar/ocultar contraseña (mantener estas)
+    const showRegisterLink = document.getElementById('showRegister');
+    const showLoginLink = document.getElementById('showLogin');
+    const flipCardInner = document.querySelector('.flip-card-inner');
+
+    if (showRegisterLink) {
+        showRegisterLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            flipCardInner.style.transform = 'rotateY(-180deg)';
+            if (messageDivLogin) messageDivLogin.textContent = ''; // Limpiar mensajes al cambiar
+            if (messageDivRegister) messageDivRegister.textContent = ''; // Limpiar mensajes al cambiar
+        });
+    }
+
+    if (showLoginLink) {
+        showLoginLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            flipCardInner.style.transform = 'rotateY(0deg)';
+            if (messageDivLogin) messageDivLogin.textContent = ''; // Limpiar mensajes al cambiar
+            if (messageDivRegister) messageDivRegister.textContent = ''; // Limpiar mensajes al cambiar
+        });
+    }
+
+    document.querySelectorAll('.password-toggle-icon').forEach(icon => {
+        icon.addEventListener('click', () => {
+            const targetId = icon.dataset.target;
+            const targetInput = document.getElementById(targetId);
+            if (targetInput.type === 'password') {
+                targetInput.type = 'text';
+                icon.textContent = 'visibility_off';
+            } else {
+                targetInput.type = 'password';
+                icon.textContent = 'visibility';
+            }
+        });
+    });
+
+    // --- Lógica para el Registro (TU CÓDIGO ACTUAL, CON USO DE messageDivRegister) ---
     if (registerForm) {
         registerForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); // Evita que el formulario recargue la página
+            e.preventDefault();
 
             const nombre = document.getElementById('register-name').value;
             const email = document.getElementById('register-email').value;
@@ -14,17 +54,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const confirmPassword = document.getElementById('register-confirm-password').value;
             const dni = document.getElementById('register-dni').value;
 
-            // Obtenemos el rol del selector. Si no hay selector (o está vacío), usamos 'estudiante' por defecto.
             const rolElement = document.getElementById('register-rol');
             const rol = rolElement && rolElement.value ? rolElement.value : 'estudiante';
 
-            // Obtenemos el código de alumno/profesor. Lo enviaremos si está presente.
             const codigoAlumnoElement = document.getElementById('register-codigo-alumno');
             const codigoAlumno = codigoAlumnoElement ? codigoAlumnoElement.value : '';
 
+            // Restablecer mensaje
+            if (messageDivRegister) messageDivRegister.textContent = '';
+
             // Validaciones básicas del lado del cliente
             if (password !== confirmPassword) {
-                alert('Las contraseñas no coinciden.');
+                if (messageDivRegister) {
+                    messageDivRegister.style.color = 'red';
+                    messageDivRegister.textContent = 'Las contraseñas no coinciden.';
+                }
                 return;
             }
 
@@ -44,47 +88,68 @@ document.addEventListener('DOMContentLoaded', () => {
                     })
                 });
 
-                const data = await response.json(); // Parsea la respuesta JSON del servidor
+                const data = await response.json();
 
-                if (response.ok) { // Si la respuesta HTTP es 2xx (ej. 200 OK, 201 Created)
-                    alert(data.msg + '\nBienvenido, ' + data.nombre + '!');
-                    // Guardar el token y el rol en localStorage para mantener la sesión
+                if (response.ok) {
                     localStorage.setItem('token', data.token);
                     localStorage.setItem('userRol', data.rol);
                     localStorage.setItem('userName', data.nombre);
 
+                    if (messageDivRegister) {
+                        messageDivRegister.style.color = 'green';
+                        messageDivRegister.textContent = data.msg + ' Bienvenido, ' + data.nombre + '! Redirigiendo...';
+                    }
+
                     console.log('Usuario registrado con éxito. Redirigiendo según rol: ' + data.rol);
 
-                    // --- Lógica de redirección AQUI después del REGISTRO ---
-                    const userRol = localStorage.getItem('userRol');
-                    if (userRol === 'estudiante') {
+                    // Lógica de redirección después del REGISTRO
+                    if (data.rol === 'estudiante' || data.rol === 'familia') {
                         window.location.href = 'dashboardEstudiante.html';
-                    } else if (userRol === 'profesor') { // <-- ¡ESTA ES LA LÍNEA AÑADIDA/MODIFICADA!
+                    } else if (data.rol === 'profesor' || data.rol === 'directivo' || data.rol === 'admin_sitio') {
                         window.location.href = 'dashboardProfesor.html';
+                    } else {
+                        if (messageDivRegister) {
+                            messageDivRegister.style.color = 'orange';
+                            messageDivRegister.textContent = 'Registro exitoso para rol ' + data.rol + '. Redirigiendo a la página principal por ahora.';
+                        }
+                        window.location.href = 'index.html';
                     }
-                    else {
-                        // Si hay otros roles, podrías redirigirlos a otras páginas.
-                        // Por ahora, si no es estudiante/profesor, los mandamos al index o a una página genérica.
-                        alert('Registro exitoso para rol ' + userRol + '. Redirigiendo a la página principal por ahora.');
-                        window.location.href = 'index.html'; // O una página genérica de "Esperando aprobación"
+                } else {
+                    if (messageDivRegister) {
+                        messageDivRegister.style.color = 'red';
+                        messageDivRegister.textContent = 'Error al registrar: ' + (data.msg || 'Ha ocurrido un error desconocido.');
                     }
-                } else { // Si la respuesta HTTP es un error (ej. 400 Bad Request, 500 Internal Server Error)
-                    alert('Error al registrar: ' + (data.msg || 'Ha ocurrido un error desconocido.'));
                 }
             } catch (error) {
                 console.error('Error de red o del servidor al registrar:', error);
-                alert('Hubo un problema al conectar con el servidor. Inténtalo más tarde.');
+                if (messageDivRegister) {
+                    messageDivRegister.style.color = 'red';
+                    messageDivRegister.textContent = 'Hubo un problema al conectar con el servidor. Inténtalo más tarde.';
+                }
             }
         });
     }
 
-    // --- Lógica para el Login ---
+    // --- Lógica para el Login (MODIFICADA, USANDO messageDivLogin) ---
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); // Evita que el formulario recargue la página
+            e.preventDefault();
 
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
+            const codigo = document.getElementById('login-code').value; // <-- CAPTURAMOS EL CÓDIGO
+
+            // Restablecer mensaje
+            if (messageDivLogin) messageDivLogin.textContent = '';
+
+            // Validación de campos requeridos (ahora incluye el código)
+            if (!email || !password || !codigo) {
+                if (messageDivLogin) {
+                    messageDivLogin.style.color = 'red';
+                    messageDivLogin.textContent = 'Por favor, completa todos los campos (email, contraseña y código).';
+                }
+                return;
+            }
 
             try {
                 const response = await fetch('http://localhost:5000/api/auth/login', {
@@ -92,38 +157,47 @@ document.addEventListener('DOMContentLoaded', () => {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ email, password })
+                    body: JSON.stringify({ email, password, codigo }) // <-- ENVIAMOS EL CÓDIGO
                 });
 
-                const data = await response.json(); // Parsea la respuesta JSON del servidor
+                const data = await response.json();
 
-                if (response.ok) { // Si la respuesta HTTP es 2xx (ej. 200 OK)
-                    alert(data.msg + '\nBienvenido de nuevo, ' + data.nombre + '!');
-                    // Guardar el token y el rol en localStorage
+                if (response.ok) {
                     localStorage.setItem('token', data.token);
                     localStorage.setItem('userRol', data.rol);
                     localStorage.setItem('userName', data.nombre);
 
+                    if (messageDivLogin) {
+                        messageDivLogin.style.color = 'green';
+                        messageDivLogin.textContent = data.msg + ' Bienvenido de nuevo, ' + data.nombre + '! Redirigiendo...';
+                    }
+
                     console.log('Inicio de sesión exitoso. Redirigiendo según rol: ' + data.rol);
 
-                    // --- Lógica de redirección AQUI después del LOGIN ---
-                    const userRol = localStorage.getItem('userRol');
-                    if (userRol === 'estudiante') {
+                    // Lógica de redirección después del LOGIN
+                    if (data.rol === 'estudiante' || data.rol === 'familia') {
                         window.location.href = 'dashboardEstudiante.html';
-                    } else if (userRol === 'profesor') { // <-- ¡ESTA ES LA LÍNEA AÑADIDA/MODIFICADA!
+                    } else if (data.rol === 'profesor' || data.rol === 'directivo' || data.rol === 'admin_sitio') {
                         window.location.href = 'dashboardProfesor.html';
+                    } else {
+                        if (messageDivLogin) {
+                            messageDivLogin.style.color = 'orange';
+                            messageDivLogin.textContent = 'Inicio de sesión exitoso para rol ' + data.rol + '. Redirigiendo a la página principal por ahora.';
+                        }
+                        window.location.href = 'index.html';
                     }
-                    else {
-                        // Redirección para otros roles.
-                        alert('Inicio de sesión exitoso para rol ' + userRol + '. Redirigiendo a la página principal por ahora.');
-                        window.location.href = 'index.html'; // O una página genérica de "Esperando aprobación"
+                } else {
+                    if (messageDivLogin) {
+                        messageDivLogin.style.color = 'red';
+                        messageDivLogin.textContent = 'Error al iniciar sesión: ' + (data.msg || 'Credenciales inválidas.');
                     }
-                } else { // Si la respuesta HTTP es un error (ej. 400 Bad Request, 500 Internal Server Error)
-                    alert('Error al iniciar sesión: ' + (data.msg || 'Credenciales inválidas.'));
                 }
             } catch (error) {
                 console.error('Error de red o del servidor al iniciar sesión:', error);
-                alert('Hubo un problema al conectar con el servidor. Inténtalo más tarde.');
+                if (messageDivLogin) {
+                    messageDivLogin.style.color = 'red';
+                    messageDivLogin.textContent = 'Hubo un problema al conectar con el servidor. Inténtalo más tarde.';
+                }
             }
         });
     }

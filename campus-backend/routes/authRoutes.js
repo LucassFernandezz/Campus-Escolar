@@ -1,15 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
+const User = require('../models/User'); 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 // --- RUTA DE REGISTRO DE USUARIO ---
 router.post('/register', async (req, res) => {
     try {
-        const { nombre, email, password, rol, codigoAlumno, dni } = req.body; // Asegúrate de que codigoAlumno esté aquí
+        const { nombre, email, password, rol, codigoAlumno, dni } = req.body;
 
-        // --- VALIDACIONES INICIALES ---
         if (!nombre || !email || !password || !dni) {
             return res.status(400).json({ msg: 'Por favor, ingrese todos los campos obligatorios: nombre, email, contraseña y DNI.' });
         }
@@ -23,45 +22,40 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ msg: 'El email ya está registrado.' });
         }
 
-        // --- LÓGICA DE ROLES Y CÓDIGOS ESPECÍFICOS ---
         let userRol = rol || 'estudiante';
 
-        // Aquí es donde validamos roles de alto privilegio (profesor, admin_sitio, directivo)
+        // Validamos código especial para roles de alto privilegio (profesor, admin_sitio, directivo)
         if (userRol !== 'estudiante' && userRol !== 'familia') {
-            // Ahora usamos 'codigoAlumno' que es lo que el frontend está enviando
             if (!codigoAlumno || codigoAlumno !== process.env.REGISTRO_ADMIN_SECRET) {
                 return res.status(403).json({ msg: 'Código de registro especial inválido para este rol.' });
             }
         }
-
-        // Si es estudiante, validamos que el código de alumno esté presente (opcional, tu lo tenías)
+        
+        // Si es estudiante, tu código anterior validaba que el código de alumno esté presente.
+        // Esto es para el REGISTRO. Para el LOGIN, usaremos los CODIGO_ESTUDIANTE_GLOBAL / CODIGO_FAMILIA_GLOBAL
         if (userRol === 'estudiante' && !codigoAlumno) {
-            return res.status(400).json({ msg: 'Los estudiantes deben proporcionar un código de alumno.' });
+            // Este mensaje puede ser redundante si el frontend ya lo hace obligatorio, pero es una buena salvaguarda
+            return res.status(400).json({ msg: 'Los estudiantes deben proporcionar un código de alumno al registrarse.' });
         }
 
-        // 4. Crear un nuevo usuario
         user = new User({
             nombre,
             email,
-            password,
+            password, // Esto se encriptará a continuación
             rol: userRol,
             dni,
-            // Puedes guardar el codigoAlumno en el modelo User si lo necesitas después, por ejemplo:
-            // codigoEspecificoRol: codigoAlumno
         });
 
-        // 5. Encriptar la contraseña
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(password, salt);
 
-        // 6. Guardar el usuario en la base de datos
         await user.save();
 
-        // 7. Generar un token JWT para la sesión
         const payload = {
             user: {
                 id: user.id,
-                rol: user.rol
+                rol: user.rol,
+                userName: user.nombre 
             }
         };
 
@@ -84,19 +78,19 @@ router.post('/register', async (req, res) => {
     }
 });
 
-// --- RUTA DE INICIO DE SESIÓN DE USUARIO ---
-router.post('/login', async (req, res) => {
-    // ... (Tu código de login, que no necesita cambios aquí) ...
-    try {
-        const { email, password } = req.body;
 
-        if (!email || !password) {
-            return res.status(400).json({ msg: 'Por favor, ingrese email y contraseña.' });
+// --- RUTA DE INICIO DE SESIÓN DE USUARIO (MODIFICADA) ---
+router.post('/login', async (req, res) => {
+    try {
+        const { email, password, codigo } = req.body; 
+
+        if (!email || !password || !codigo) {
+            return res.status(400).json({ msg: 'Por favor, ingrese email, contraseña y código.' });
         }
 
         let user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ msg: 'Credenciales inválidas.' });
+            return res.status(400).json({ msg: 'Credenciales inválidas.' }); 
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
@@ -104,10 +98,41 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ msg: 'Credenciales inválidas.' });
         }
 
+        // --- Lógica de validación del 'codigo' según el rol del usuario ---
+        let codigoValido = false;
+
+        switch (user.rol) {
+            case 'profesor':
+            case 'directivo':
+            case 'admin_sitio':
+                if (codigo === process.env.REGISTRO_ADMIN_SECRET) {
+                    codigoValido = true;
+                }
+                break;
+            case 'estudiante':
+                if (codigo === process.env.CODIGO_ESTUDIANTE_GLOBAL) {
+                    codigoValido = true;
+                }
+                break;
+            case 'familia':
+                if (codigo === process.env.CODIGO_FAMILIA_GLOBAL) {
+                    codigoValido = true;
+                }
+                break;
+            default:
+                codigoValido = false;
+                break;
+        }
+
+        if (!codigoValido) {
+            return res.status(400).json({ msg: 'Código de acceso incorrecto para su rol.' });
+        }
+
         const payload = {
             user: {
                 id: user.id,
-                rol: user.rol
+                rol: user.rol,
+                userName: user.nombre 
             }
         };
 

@@ -15,8 +15,7 @@ app.use(express.json()); // Permite a Express parsear cuerpos de petición JSON
 // --- CONEXIÓN A MONGODB ATLAS ---
 mongoose.connect(process.env.MONGO_URI, {
     // useNewUrlParser y useUnifiedTopology ya no son necesarias en Mongoose 6+
-    // Pero dejarlas no causa daño, solo emiten una advertencia.
-    // Las quitamos para mayor limpieza, asumiendo una versión reciente de Mongoose.
+    // Puedes dejar los parámetros vacíos si tu versión de Mongoose es reciente
 })
 .then(() => console.log('Conectado a MongoDB Atlas'))
 .catch(err => console.error('Error al conectar a MongoDB Atlas:', err));
@@ -29,6 +28,10 @@ app.get('/', (req, res) => {
 
 // Rutas de autenticación (registro e inicio de sesión)
 app.use('/api/auth', require('./routes/authRoutes'));
+
+// Rutas para comunicados
+const comunicadosRoutes = require('./routes/comunicados'); // Importa las rutas de comunicados
+app.use('/api/comunicados', comunicadosRoutes); // Usa las rutas de comunicados en el path /api/comunicados
 
 // --- Iniciar el servidor ---
 app.listen(PORT, () => {
